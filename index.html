@@ -7,42 +7,79 @@
   <title>Проект Место</title>
   <link rel="stylesheet" href="./pages/index.css">
 </head>
-
 <body class="body">
   <div class="page">
-
     <header class="header">
-      <div class="header__lang">
-        <img src="images/header-logo.svg" alt="Россия" class="header__logo">
-        <ul class="header__lang-links">
-          <li><a href="#" class="link header__lang-link header__lang-link_active">Ru</a></li>
-          <li><a href="#" class="link header__lang-link">En</a></li>
-        </ul>
-      </div>
+        <img src="images/header-logo.svg" alt="Проект Место" class="header__logo">
     </header>
 
-    <main class="content">
+    <section class="lead">
+      <img src="images/lead-jak-iv-custo.png" alt="Жак-Ив Кусто" class="lead__picture">
+      <div class="lead__profile">
+        <h1 class="lead__title">Жак-Ив Кусто</h1>
+        <button class="button lead__edit-button"></button>
+        <p class="lead__subtitle">Исследователь океана</p>
+      </div>
+      <button class="button lead__add-button"></button>
+    </section>
+
+
       <section class="places">
+
         <article class="place">
-          <h2 class="place__title">Куршская коса</h2>
-          <div class="place__website">
-            <p class="place__url-heading">URL</p>
-            <a href="http://park-kosa.ru" class="link place__link">park-kosa.ru</a>
+          <img src="./images/place-kosa.jpg" alt="Карачаевск" class="place__image">
+          <div class="place__description">
+            <h2 class="place__title">Карачаевск</h2>
+            <button type="radio" class="button place__like-button"></button>
           </div>
-          <img src="./images/place-kosa.jpg" alt="Куршская коса" class="place__image">
-          <div class="place__paragraphs">
-            <p class="place__paragraph">Здесь, посреди лесов и песчаных дюн, вы сможете увидеть два водных горизонта — спокойного Куршского залива с одной стороны и подёрнутого рябью волн Балтийского моря с другой. Уникальная природная зона на краю российского анклава.</p>
-            <p class="place__paragraph">На этом Калининградская область не заканчивается. Для путешественника и исследователя там же по соседству — самая западная точка России, Балтийская коса, — и немецкое наследие россыпи небольших приморских городов. Атмосфера здешних мест исключает суету, окуная в спокойствие природы и запах стального, прохладного моря.</p>
+        </article>
+
+        <article class="place">
+          <img src="./images/place-kosa.jpg" alt="Карачаевск" class="place__image">
+          <div class="place__description">
+            <h2 class="place__title">Карачаевск-Болакординск</h2>
+            <button class="button place__like-button"></button>
           </div>
-        </article>  
+        </article>
+
+        <article class="place">
+          <img src="./images/place-kosa.jpg" alt="Карачаевск" class="place__image">
+          <div class="place__description">
+            <h2 class="place__title">Карачаевск-Болакординск</h2>
+            <button class="button place__like-button"></button>
+          </div>
+        </article>
+
+        <article class="place">
+          <img src="./images/place-kosa.jpg" alt="Карачаевск" class="place__image">
+          <div class="place__description">
+            <h2 class="place__title">Карачаевск</h2>
+            <button class="button place__like-button"></button>
+          </div>
+        </article>
+
       </section>
-    </main>
+
+      
 
     <footer class="footer">
-          <p class="footer__copyright">&copy; 2022. Никишин Андрей</p>
+          <p class="footer__copyright">&copy; 2022 Никишин Андрей</p>
     </footer>
 
+    <div class="popup">
+      <div class="popup__container">
+        <button class="button popup__close-button"></button>
+        <form class="popup__form">
+          <p class="popup__title">Редактировать профиль</p>
+          <input type="text" class="popup__form-input popup__form-input_type_name">
+          <input type="text" class="popup__form-input popup__form-input_type_job">
+          <button type="submit" class="button popup__form-submit">Сохранить</button>
+        </form>
+      </div>
+    </div>
+
   </div>
+  <script src="script.js"></script> 
 </body>
 
 </html>

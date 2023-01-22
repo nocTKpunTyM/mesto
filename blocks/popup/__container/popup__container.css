@@ -1,0 +1,18 @@
+.popup__container {
+    margin-top: 123px;
+    width: 88%;
+    height: 330px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    color: black;
+    background-color: white;
+    border-radius: 10px;
+}
+
+@media screen and (min-width: 1024px) {
+    .popup__container {
+        margin-top: 195px;
+        width: 430px;
+    }
+}
