@@ -32,14 +32,3 @@ function closePopup() {
 }
 let popupX = document.querySelector('.popup__close-button');
 popupX.addEventListener('click', closePopup);
-
-let placeHearth = document.querySelector('.place__like-button');
-function changeHearthActive() {
-    if(placeHearth.classList.contains('place__like-button_active')) {
-        placeHearth.classList.remove('place__like-button_active');
-    }
-    else {
-        placeHearth.classList.add('place__like-button_active');
-    }
-}
-placeHearth.addEventListener('click', changeHearthActive);
