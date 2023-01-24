@@ -1,13 +1,16 @@
 .popup__form {
-    margin: 0;
+    margin: 25px 0 0 0;
     padding: 0;
-    width: 238px;
+    width: 70%;
+    min-width: 238px;
     display: flex;
     flex-wrap: wrap;
 }
 
-@media screen and (min-width: 1024px) {
+@media screen and (min-width: 768px) {
     .popup__form {
-        width: 358px;
+        margin: 26px 0 0 0;
+        padding-top: 8px;
+        min-width: 358px;
     }
 }

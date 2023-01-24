@@ -12,56 +12,58 @@
     <header class="header">
         <img src="images/header-logo.svg" alt="Проект Место" class="header__logo">
     </header>
-    <section class="lead">
+    <main class="lead">
       <img src="images/lead-jak-iv-custo.png" alt="Жак-Ив Кусто" class="lead__picture">
       <div class="lead__profile">
-        <h1 class="lead__title">Жак-Ив Кусто</h1>
-        <button class="button lead__edit-button"></button>
+        <div class="lead__profile-name">
+          <h1 class="lead__title">Жак-Ив Кусто</h1>
+          <button type="button" class="button lead__edit-button"></button>
+        </div>
         <p class="lead__subtitle">Исследователь океана</p>
       </div>
-      <button class="button lead__add-button"></button>
-    </section>
+      <button type="button" class="button lead__add-button"></button>
+    </main>
       <section class="places">
         <article class="place">
           <img src="./images/place-barhans.jpg" alt="Барханы" class="place__image">
           <div class="place__description">
             <h2 class="place__title">Барханы</h2>
-            <button class="button place__like-button"></button>
+            <button type="button" class="button place__like-button"></button>
           </div>
         </article>
         <article class="place">
           <img src="./images/place-dark-mountain.jpg" alt="Темная гора" class="place__image">
           <div class="place__description">
             <h2 class="place__title">Темная гора</h2>
-            <button class="button place__like-button"></button>
+            <button type="button" class="button place__like-button"></button>
           </div>
         </article>
         <article class="place">
           <img src="./images/place-paradise.jpg" alt="Райский уголок" class="place__image">
           <div class="place__description">
             <h2 class="place__title">Райский уголок</h2>
-            <button class="button place__like-button"></button>
+            <button type="button" class="button place__like-button"></button>
           </div>
         </article>
         <article class="place">
           <img src="./images/place-tanis-mountain.jpg" alt="Гора Танисс" class="place__image">
           <div class="place__description">
             <h2 class="place__title">Гора Танисс</h2>
-            <button class="button place__like-button"></button>
+            <button type="button" class="button place__like-button"></button>
           </div>
         </article>
         <article class="place">
           <img src="./images/place-winging-road.jpg" alt="Извилистая дорога удачи" class="place__image">
           <div class="place__description">
             <h2 class="place__title">Извилистая дорога удачи</h2>
-            <button class="button place__like-button"></button>
+            <button type="button" class="button place__like-button"></button>
           </div>
         </article>
         <article class="place">
           <img src="./images/place-winter-mountain.jpg" alt="Зимняя гора причуд" class="place__image">
           <div class="place__description">
             <h2 class="place__title">Зимняя гора причуд</h2>
-            <button class="button place__like-button"></button>
+            <button type="button" class="button place__like-button"></button>
           </div>
         </article>
       </section>
@@ -70,16 +72,16 @@
     </footer>
     <div class="popup">
       <div class="popup__container">
-        <button class="button popup__close-button"></button>
-        <form class="popup__form">
-          <p class="popup__title">Редактировать профиль</p>
-          <input type="text" class="popup__form-input popup__form-input_type_name">
-          <input type="text" class="popup__form-input popup__form-input_type_job">
+        <button type="button" class="button popup__close-button"></button>
+        <form name="profile-edit" class="popup__form">
+          <h2 class="popup__title">Редактировать профиль</h2>
+          <input name="name" type="text" placeholder="Имя и фамилия" class="popup__form-input popup__form-input_type_name">
+          <input name="job" type="text" placeholder="Профессия" class="popup__form-input popup__form-input_type_job">
           <button type="submit" class="button popup__form-submit">Сохранить</button>
         </form>
       </div>
     </div>
   </div>
-  <script src="script.js"></script> 
+  <script src="scripts/index.js"></script> 
   </body>
 </html>

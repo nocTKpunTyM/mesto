@@ -5,10 +5,3 @@
     justify-content: space-between;
     align-items: center;
 }
-
-@media screen and (min-width: 768px) {
-	.place__website {
-        margin: 0;
-        width: 100%;
-    }
-}

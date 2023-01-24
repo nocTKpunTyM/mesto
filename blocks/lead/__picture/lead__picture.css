@@ -1,5 +1,6 @@
 .lead__picture {
     width: 120px;
+    border-radius: 50%;
 }
 
 @media screen and (min-width: 768px) {
