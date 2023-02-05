@@ -1,0 +1,16 @@
+.popup-add-place__container {
+    width: 88%;
+    min-height: 322px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    color: black;
+    background-color: white;
+    border-radius: 10px;
+}
+
+@media screen and (min-width: 768px) {
+    .popup-add-place__container {
+        width: 430px;
+    }
+}
