@@ -101,7 +101,7 @@ function closePopup() {
 const popupEditProfile = document.querySelector('.popup-edit-profile');
 const buttonOpenEditProfile = document.querySelector('.lead__edit-button');
 const buttonCloseEditProfile = document.querySelector('.popup-edit-profile__close');
-const buttonSaveEditProfile = document.querySelector('.form-profile_submit');
+const buttonSaveEditProfile = document.querySelector('.form-profile__submit');
 const profileName = document.querySelector('.lead__title');
 const profileJob = document.querySelector('.lead__subtitle');
 const inputName = document.querySelector('.form__input_type_name');
@@ -141,9 +141,9 @@ function savePopupAddPlace(event) {
     placesList.prepend(makeNewPlace());
     closePopup();
 }
-document.querySelector('.form-place_submit').addEventListener('click', savePopupAddPlace);
+document.querySelector('.form-place-add').addEventListener('click', savePopupAddPlace);
 
 // РАБОТА МОДАЛКИ С БОЛЬШОЙ КАРТИНКОЙ
 const popupImgBig = document.querySelector('.popup-img-big');
-const buttonCloseBigImage = document.querySelector('.popup-big-image_close');
+const buttonCloseBigImage = document.querySelector('.popup-big-image-close');
 buttonCloseBigImage.addEventListener('click', closePopup);
