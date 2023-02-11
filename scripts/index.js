@@ -145,5 +145,5 @@ document.querySelector('.form-place_submit').addEventListener('click', savePopup
 
 // РАБОТА МОДАЛКИ С БОЛЬШОЙ КАРТИНКОЙ
 const popupImgBig = document.querySelector('.popup-img-big');
-const buttonCloseBigImage = document.querySelector('.popup-big-image__close');
+const buttonCloseBigImage = document.querySelector('.popup-big-image_close');
 buttonCloseBigImage.addEventListener('click', closePopup);
