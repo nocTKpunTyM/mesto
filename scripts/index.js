@@ -1,28 +1,5 @@
-let popup = document.querySelector('.popup');
-let popupAddPlace = document.querySelector('.popup-add-place');
-let popupForm = document.querySelector('.popup__form');
-let popupAddPlaceForm = document.querySelector('.popup-add-place__form');
-let popupImgBig = document.querySelector('.popup-img-big');
-
-let profileName = document.querySelector('.lead__title');
-let profileJob = document.querySelector('.lead__subtitle');
-let inputName = document.querySelector('.popup__form-input_type_name');
-let inputJob = document.querySelector('.popup__form-input_type_job');
-
-let inputTitle = document.querySelector('.popup-add-place__form-input_type_title');
-let inputUrl = document.querySelector('.popup-add-place__form-input_type_url');
-
-let editButton = document.querySelector('.lead__edit-button');
-let addPlaceButton = document.querySelector('.lead__add-button');
-let popupX = document.querySelector('.popup__close-button');
-let popupXAddPlace = document.querySelector('.popup-add-place__close-button');
-let popupXImgBig = document.querySelector('.popup-img-big__close-button');
-
-const placeTemplate = document.querySelector('#place').content;
+const placeTemplate = document.querySelector('#place').content.querySelector('.place');
 const placesList = document.querySelector('.places');
-const imageBig = document.querySelector('.popup-img-big__image');
-const imageBigSub = document.querySelector('.popup-img-big__image-subline');
-
 const places = [
     {
         img_src: './images/place-barhans.jpg',
@@ -56,103 +33,117 @@ const places = [
     }
 ];
 
-places.forEach(function (element) {
+// КУЧА ФУНКЦИЙ ДЛЯ СОЗДАНИЯ КАРТОЧКИ МЕСТА
+const imageBig = document.querySelector('.popup-img-big__image');
+const imageBigSub = document.querySelector('.popup-img-big__image-subline');
+function clickToBigImg(element) {
+    element.addEventListener('click', function (evt) {
+    imageBig.src = evt.target.src;
+    imageBigSub.textContent = evt.target.alt;
+    openPopup(popupImgBig);
+    });
+}
+function clickToLike(element) {
+    element.querySelector('.button__like').addEventListener('click', function (evt) {
+        evt.target.classList.toggle('button__like_active');
+    });
+}
+function clickToDelete(element) {
+    element.addEventListener('click', function () {
+        const listItem = element.closest('.place');
+        listItem.remove();
+    });
+}
+function makePlaces(element) {
     const placeElement = placeTemplate.cloneNode(true);
-    const deleteButton = placeElement.querySelector('.place__trash-button');
-    let placeImage = placeElement.querySelector('.place__image');
+    const deleteButton = placeElement.querySelector('.button__trash');
+    const placeImage = placeElement.querySelector('.place__image');
+    clickToBigImg(placeImage);
+    clickToLike(placeElement);
+    clickToDelete(deleteButton);
+    placeElement.querySelector('.place__title').textContent = element.title;
     placeImage.src = element.img_src;
     placeImage.alt = element.img_alt;
-    placeImage.addEventListener('click', function (evt) {
-        imageBig.src = evt.target.src;
-        imageBigSub.textContent = evt.target.alt;
-        popupImgBig.classList.add('popup-img-big_opened');
-    });
-    placeElement.querySelector('.place__title').textContent = element.title;
-    placeElement.querySelector('.place__like-button').addEventListener('click', function (evt) {
-        evt.target.classList.toggle('place__like-button_active');
-    });
-    deleteButton.addEventListener('click', function () {
-        const listItem = deleteButton.closest('.place');
-        listItem.remove();
-    }); 
-    placesList.append(placeElement);
+    return placeElement;
+}
+function makeNewPlace() {
+    const placeElement = placeTemplate.cloneNode(true);
+    const deleteButton = placeElement.querySelector('.button__trash');
+    const placeImage = placeElement.querySelector('.place__image');
+    const inputTitle = document.querySelector('.form__input_type_title');
+    const inputUrl = document.querySelector('.form__input_type_url');
+    clickToBigImg(placeImage);
+    clickToLike(placeElement);
+    clickToDelete(deleteButton);
+    placeElement.querySelector('.place__title').textContent = inputTitle.value;
+    placeImage.src = inputUrl.value;
+    placeImage.alt = inputTitle.value;
+    inputUrl.value = '';
+    inputTitle.value = '';
+    return placeElement;
+}
+
+// ЗАГРУЗКА КАРТОЧЕК ПРИ ОТКРЫТИИ СТРАНИЦЫ
+places.forEach(function (element) {
+    placesList.append(makePlaces(element));
 })
 
+// ОТКРЫТИЕ И ЗАКРЫТИЕ ВСЕХ МОДАЛЬНЫХ ОКОН
+function openPopup(evt) {
+    evt.classList.add('popup_opened');
+}
+function closePopup() {
+    popupForClose = document.querySelector('.popup_opened');
+    popupForClose.classList.remove('popup_opened');
+}
+
+// РАБОТА МОДАЛКИ РЕДАКТИРОВАНИЯ ПРОФИЛЯ
+const popupEditProfile = document.querySelector('.popup-edit-profile');
+const buttonOpenEditProfile = document.querySelector('.lead__edit-button');
+const buttonCloseEditProfile = document.querySelector('.popup-edit-profile__close');
+const buttonSaveEditProfile = document.querySelector('.form-profile_submit');
+const profileName = document.querySelector('.lead__title');
+const profileJob = document.querySelector('.lead__subtitle');
+const inputName = document.querySelector('.form__input_type_name');
+const inputJob = document.querySelector('.form__input_type_job');
 function insertProfileToForm() {
     inputName.value = profileName.textContent;
     inputJob.value = profileJob.textContent;
 }
-
-function openPopup() {
+function openPopupEditProfile() {
     insertProfileToForm();
-    popup.classList.add('popup-add-place_opened');
+    openPopup(popupEditProfile);
 }
-
-function closePopup() {
-    popup.classList.remove('popup-add-place_opened');
-}
-
+buttonOpenEditProfile.addEventListener('click', openPopupEditProfile);
+buttonCloseEditProfile.addEventListener('click', closePopup);
+// Сохранение профиля из модалки
 function insertFormToProfile() {
     profileName.textContent = inputName.value;
     profileJob.textContent = inputJob.value;
 }
-
-function savePopup(event) {
+function saveProfile(event) {
     event.preventDefault();
     insertFormToProfile();
     closePopup();
 }
+buttonSaveEditProfile.addEventListener('click', saveProfile);
 
+// РАБОТА МОДАЛКИ ДОБАВЛЕНИЯ КАРТОЧКИ МЕСТА
+const popupAddPlace = document.querySelector('.popup-add-place');
 function openPopupAddPlace() {
-    inputUrl.value =  '';
-    inputTitle.value =  '';
-    popupAddPlace.classList.add('popup-add-place_opened');
+    openPopup(popupAddPlace);
 }
-    
-function closePopupAddPlace() {
-    popupAddPlace.classList.remove('popup-add-place_opened');
-}
-
-function openPopupImgBig() {
-    popupImgBig.classList.add('popup-img-big_opened');
-}
-
-function closePopupImgBig() {
-    popupImgBig.classList.remove('popup-img-big_opened');
-}
-
+document.querySelector('.lead__add-button').addEventListener('click', openPopupAddPlace);
+document.querySelector('.popup-add-place__close').addEventListener('click', closePopup);
+// Добавление карточки из модалки
 function savePopupAddPlace(event) {
     event.preventDefault();
-    addPlace();
-    closePopupAddPlace();
+    placesList.prepend(makeNewPlace());
+    closePopup();
 }
+document.querySelector('.form-place_submit').addEventListener('click', savePopupAddPlace);
 
-function addPlace () {
-    const placeElement = placeTemplate.cloneNode(true);
-    const deleteButton = placeElement.querySelector('.place__trash-button');
-    let placeImage = placeElement.querySelector('.place__image');
-    placeImage.src = inputUrl.value;
-    placeImage.alt = inputTitle.value;
-    placeImage.addEventListener('click', function (evt) {
-        imageBig.src = evt.target.src;
-        imageBigSub.textContent = evt.target.alt;
-        popupImgBig.classList.add('popup-img-big_opened');
-    });
-    placeElement.querySelector('.place__title').textContent = inputTitle.value;
-    placeElement.querySelector('.place__like-button').addEventListener('click', function (evt) {
-        evt.target.classList.toggle('place__like-button_active');
-    });
-    deleteButton.addEventListener('click', function () {
-        const listItem = deleteButton.closest('.place');
-        listItem.remove();
-    });
-    placesList.prepend(placeElement);
-}
-
-editButton.addEventListener('click', openPopup);
-popupX.addEventListener('click', closePopup);
-addPlaceButton.addEventListener('click', openPopupAddPlace);
-popupXImgBig.addEventListener('click', closePopupImgBig);
-popupXAddPlace.addEventListener('click', closePopupAddPlace);
-popupForm.addEventListener('submit', savePopup);
-popupAddPlaceForm.addEventListener('submit', savePopupAddPlace);
+// РАБОТА МОДАЛКИ С БОЛЬШОЙ КАРТИНКОЙ
+const popupImgBig = document.querySelector('.popup-img-big');
+const buttonCloseBigImage = document.querySelector('.popup-big-image__close');
+buttonCloseBigImage.addEventListener('click', closePopup);

@@ -8,10 +8,13 @@
 </head>
 <body class="body">
   <div class="page">
+
     <header class="header">
         <img src="images/header-logo.svg" alt="Проект Место" class="header__logo">
     </header>
+
     <main class="main">
+
       <section class="lead">
         <img src="images/lead-jak-iv-custo.png" alt="Жак-Ив Кусто" class="lead__picture">
         <div class="lead__profile">
@@ -23,39 +26,44 @@
         </div>
         <button type="button" class="button lead__add-button"></button>
       </section>
+
       <section class="places">
         
       </section>
+
     </main>
+
     <footer class="footer">
           <p class="footer__copyright">&copy; 2022 Никишин Андрей</p>
     </footer>
-    <div class="popup">
+
+    <div class="popup popup-edit-profile">
       <div class="popup__container">
-        <button type="button" class="button popup__close-button"></button>
-        <form name="profile-edit" class="popup__form">
-          <h2 class="popup__title">Редактировать профиль</h2>
-          <input name="name" type="text" placeholder="Имя и фамилия" class="popup__form-input popup__form-input_type_name">
-          <input name="job" type="text" placeholder="Профессия" class="popup__form-input popup__form-input_type_job">
-          <button type="submit" class="button popup__form-submit">Сохранить</button>
-        </form>
-      </div>
-    </div>
-    <div class="popup-add-place">
-      <div class="popup-add-place__container">
-        <button type="button" class="button popup-add-place__close-button"></button>
-        <form name="add-place" class="popup-add-place__form">
-          <h2 class="popup-add-place__title">Новое место</h2>
-          <input name="title" type="text" placeholder="Название" class="popup-add-place__form-input popup-add-place__form-input_type_title">
-          <input name="url" type="text" placeholder="Ссылка на картинку" class="popup-add-place__form-input popup-add-place__form-input_type_url">
-          <button type="submit" class="button popup-add-place__form-submit">Сохранить</button>
+        <button type="button" class="button button__close popup-edit-profile__close"></button>
+        <form name="edit-profile" class="form form-profile">
+          <h2 class="form__title">Редактировать профиль</h2>
+          <input name="name" type="text" placeholder="Имя и фамилия" class="form__input form__input_type_name">
+          <input name="job" type="text" placeholder="Профессия" class="form__input form__input_type_job">
+          <button type="submit" class="button button__submit form-profile_submit">Сохранить</button>
         </form>
       </div>
     </div>
 
-    <div class="popup-img-big">
+    <div class="popup popup-add-place">
+      <div class="popup__container">
+        <button type="button" class="button button__close popup-add-place__close"></button>
+        <form name="edit-profile" class="form form-add-place">
+          <h2 class="form__title">Новое место</h2>
+          <input name="name" type="text" placeholder="Название" class="form__input form__input_type_title">
+          <input name="job" type="text" placeholder="Ссылка на картинку" class="form__input form__input_type_url">
+          <button type="submit" class="button button__submit form-place_submit">Добавить</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="popup popup-img-big">
       <div class="popup-img-big__container">
-        <button type="button" class="button popup-img-big__close-button"></button>
+        <button type="button" class="button button__close popup-big-image__close"></button>
         <img src="https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg" alt="Архыз" class="popup-img-big__image">
         <p class="popup-img-big__image-subline"></p>
       </div>
@@ -63,15 +71,15 @@
     
     <template id="place">
       <article class="place">
-        <button type="button" class="button place__trash-button"></button>
+        <button type="button" class="button button__trash"></button>
           <img src="https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg" alt="Архыз" class="place__image">
         <div class="place__description">
           <h2 class="place__title"></h2>
-          <button type="button" class="button place__like-button"></button>
+          <button type="button" class="button button__like"></button>
         </div>
       </article>
     </template>
   </div>
-  <script src="scripts/index.js"></script> 
+  <script src="scripts/index.js"></script>
   </body>
 </html>

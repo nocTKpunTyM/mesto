@@ -1,4 +1,4 @@
-.place__like-button {
+.button__like {
     margin: 0 20px 0 0;
     padding: 0;
     width: 22px;
@@ -10,6 +10,6 @@
     border: none;
 }
 
-.place__like-button:hover {
+.button__like:hover {
     opacity: 50%;
 }
