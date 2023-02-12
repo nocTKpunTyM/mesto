@@ -33,53 +33,28 @@ const places = [
     }
 ];
 
-// КУЧА ФУНКЦИЙ ДЛЯ СОЗДАНИЯ КАРТОЧКИ МЕСТА
+// ФУНКЦИЯ ДЛЯ СОЗДАНИЯ КАРТОЧКИ МЕСТА
 const imageBig = document.querySelector('.popup-img-big__image');
 const imageBigSub = document.querySelector('.popup-img-big__image-subline');
-function clickToBigImg(element) {
-    element.addEventListener('click', function (evt) {
-    imageBig.src = evt.target.src;
-    imageBigSub.textContent = evt.target.alt;
-    openPopup(popupImgBig);
-    });
-}
-function clickToLike(element) {
-    element.querySelector('.button__like').addEventListener('click', function (evt) {
-        evt.target.classList.toggle('button__like_active');
-    });
-}
-function clickToDelete(element) {
-    element.addEventListener('click', function () {
-        const listItem = element.closest('.place');
-        listItem.remove();
-    });
-}
 function makePlaces(element) {
     const placeElement = placeTemplate.cloneNode(true);
     const deleteButton = placeElement.querySelector('.button__trash');
     const placeImage = placeElement.querySelector('.place__image');
-    clickToBigImg(placeImage);
-    clickToLike(placeElement);
-    clickToDelete(deleteButton);
+    placeImage.addEventListener('click', function (evt) {
+        imageBig.src = evt.target.src;
+        imageBigSub.textContent = evt.target.alt;
+        openPopup(popupImgBig);
+    });
+    placeElement.querySelector('.button__like').addEventListener('click', function (evt) {
+        evt.target.classList.toggle('button__like_active');
+    });
+    deleteButton.addEventListener('click', function () {
+        const listItem = deleteButton.closest('.place');
+        listItem.remove();
+    });
     placeElement.querySelector('.place__title').textContent = element.title;
     placeImage.src = element.img_src;
     placeImage.alt = element.img_alt;
-    return placeElement;
-}
-function makeNewPlace() {
-    const placeElement = placeTemplate.cloneNode(true);
-    const deleteButton = placeElement.querySelector('.button__trash');
-    const placeImage = placeElement.querySelector('.place__image');
-    const inputTitle = document.querySelector('.form__input_type_title');
-    const inputUrl = document.querySelector('.form__input_type_url');
-    clickToBigImg(placeImage);
-    clickToLike(placeElement);
-    clickToDelete(deleteButton);
-    placeElement.querySelector('.place__title').textContent = inputTitle.value;
-    placeImage.src = inputUrl.value;
-    placeImage.alt = inputTitle.value;
-    inputUrl.value = '';
-    inputTitle.value = '';
     return placeElement;
 }
 
@@ -89,8 +64,8 @@ places.forEach(function (element) {
 })
 
 // ОТКРЫТИЕ И ЗАКРЫТИЕ ВСЕХ МОДАЛЬНЫХ ОКОН
-function openPopup(evt) {
-    evt.classList.add('popup_opened');
+function openPopup(element) {
+    element.classList.add('popup_opened');
 }
 function closePopup() {
     popupForClose = document.querySelector('.popup_opened');
@@ -138,7 +113,18 @@ document.querySelector('.popup-add-place__close').addEventListener('click', clos
 // Добавление карточки из модалки
 function savePopupAddPlace(event) {
     event.preventDefault();
-    placesList.prepend(makeNewPlace());
+    const inputTitle = document.querySelector('.form__input_type_title');
+    const inputUrl = document.querySelector('.form__input_type_url');
+    const place = [
+    {
+    img_src: inputUrl.value,
+    img_alt: inputTitle.value,
+    title: inputTitle.value
+    }
+    ];
+    place.forEach(function (element) {
+        placesList.prepend(makePlaces(element));
+    })
     closePopup();
 }
 document.querySelector('.form-place-add').addEventListener('click', savePopupAddPlace);
