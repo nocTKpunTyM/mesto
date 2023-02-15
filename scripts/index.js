@@ -36,7 +36,7 @@ const places = [
 // ФУНКЦИЯ ДЛЯ СОЗДАНИЯ КАРТОЧКИ МЕСТА
 const imageBig = document.querySelector('.popup-img-big__image');
 const imageBigSub = document.querySelector('.popup-img-big__image-subline');
-function makePlaces(element) {
+function makePlace(element) {
     const placeElement = placeTemplate.cloneNode(true);
     const deleteButton = placeElement.querySelector('.button__trash');
     const placeImage = placeElement.querySelector('.place__image');
@@ -60,7 +60,7 @@ function makePlaces(element) {
 
 // ЗАГРУЗКА КАРТОЧЕК ПРИ ОТКРЫТИИ СТРАНИЦЫ
 places.forEach(function (element) {
-    placesList.append(makePlaces(element));
+    placesList.append(makePlace(element));
 })
 
 // ОТКРЫТИЕ И ЗАКРЫТИЕ ВСЕХ МОДАЛЬНЫХ ОКОН
@@ -111,21 +111,20 @@ function openPopupAddPlace() {
 document.querySelector('.lead__add-button').addEventListener('click', openPopupAddPlace);
 document.querySelector('.popup-add-place__close').addEventListener('click', closePopup);
 // Добавление карточки из модалки
+const inputTitle = document.querySelector('.form__input_type_title');
+const inputUrl = document.querySelector('.form__input_type_url');
 function savePopupAddPlace(event) {
     event.preventDefault();
-    const inputTitle = document.querySelector('.form__input_type_title');
-    const inputUrl = document.querySelector('.form__input_type_url');
-    const place = [
+    const place = 
     {
     img_src: inputUrl.value,
     img_alt: inputTitle.value,
     title: inputTitle.value
-    }
-    ];
-    place.forEach(function (element) {
-        placesList.prepend(makePlaces(element));
-    })
+    };
+    placesList.prepend(makePlace(place));
     closePopup();
+    inputUrl.value = '';
+    inputTitle.value = '';
 }
 document.querySelector('.form-place-add').addEventListener('click', savePopupAddPlace);
 
