@@ -97,9 +97,11 @@ function insertFormToProfile() {
     profileJob.textContent = inputJob.value;
 }
 function saveProfile(event) {
-    event.preventDefault();
-    insertFormToProfile();
-    closePopup();
+    event.preventDefault();   
+    if(!event.target.classList.contains('button_submit_inactive')) {
+        insertFormToProfile();
+        closePopup();
+    }
 }
 buttonSaveEditProfile.addEventListener('click', saveProfile);
 
@@ -115,20 +117,41 @@ const inputTitle = document.querySelector('.form__input_type_title');
 const inputUrl = document.querySelector('.form__input_type_url');
 function savePopupAddPlace(event) {
     event.preventDefault();
-    const place = 
-    {
-    img_src: inputUrl.value,
-    img_alt: inputTitle.value,
-    title: inputTitle.value
-    };
-    placesList.prepend(makePlace(place));
-    closePopup();
-    inputUrl.value = '';
-    inputTitle.value = '';
+    if(!event.target.classList.contains('button_submit_inactive')) {
+        const place = 
+        {
+        img_src: inputUrl.value,
+        img_alt: inputTitle.value,
+        title: inputTitle.value
+        };
+        placesList.prepend(makePlace(place));
+        closePopup();
+        inputUrl.value = '';
+        inputTitle.value = '';
+    }
 }
-document.querySelector('.form-place-add').addEventListener('click', savePopupAddPlace);
+document.querySelector('.form-add-place__submit').addEventListener('click', savePopupAddPlace);
 
 // РАБОТА МОДАЛКИ С БОЛЬШОЙ КАРТИНКОЙ
 const popupImgBig = document.querySelector('.popup-img-big');
 const buttonCloseBigImage = document.querySelector('.popup-big-image-close');
 buttonCloseBigImage.addEventListener('click', closePopup);
+
+// ЗАКРЫТИЕ ПО КЛАВИШИ ESC
+document.addEventListener('keydown', function (evt) {
+    if (evt.key === 'Escape') {
+        if (document.querySelector('.popup_opened')) {
+        closePopup();
+        }
+    }
+});
+
+// ЗАКРЫТИЕ ПО ПУСТОМУ МЕСТУ
+const popupsList = Array.from(document.querySelectorAll('.popup'));
+popupsList.forEach((popupElement) => {
+    popupElement.addEventListener('click', (evt) => {
+        if (evt.target.classList.contains('popup')){
+            closePopup();
+        }
+    });
+});

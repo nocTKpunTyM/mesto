@@ -1,0 +1,6 @@
+.form__input-error {
+    color: red;
+    font-family: 'Inter';
+    font-size: 12px;
+    line-height: 15px;
+}
