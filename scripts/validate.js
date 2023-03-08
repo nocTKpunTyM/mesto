@@ -29,7 +29,7 @@ const hasInvalidInput = (inputList) => {
 };
 
 // 4. ОТОБРАЖАЕТ ИЛИ ПРЯЧЕТ ТЕКСТ ОШИБКИ ОТ РЕЗУЛЬТАТА ФУНКЦИИ 5
-const isValid = (formElement, inputElement) => {
+const isValid = (formElement, inputElement, options) => {
   if (!inputElement.validity.valid) {
     showInputError(formElement, inputElement, inputElement.validationMessage, options);
   } else {
@@ -55,7 +55,7 @@ const setEventListeners = (formElement, options) => {
   toggleButtonState(inputList, buttonElement, options.disabledButtonClass);
   inputList.forEach((inputElement) => {
       inputElement.addEventListener('input', () => {
-          isValid(formElement, inputElement);
+          isValid(formElement, inputElement, options);
           toggleButtonState(inputList, buttonElement, options.disabledButtonClass);
       });
   });
@@ -65,9 +65,6 @@ const setEventListeners = (formElement, options) => {
 const enableValidation = (options) => {
   const formList = Array.from(document.querySelectorAll(options.formSelector));
   formList.forEach((formElement) => {
-    formElement.addEventListener('submit', (evt) => {
-      evt.preventDefault();
-    });
     setEventListeners(formElement,options);
   });
 };

@@ -36,6 +36,7 @@ function makePlace(element) {
     const placeImage = placeElement.querySelector('.place__image');
     placeImage.addEventListener('click', function (evt) {
         imageBig.src = element.link;
+        imageBig.alt = element.name;
         imageBigSub.textContent = element.name;
         openPopup(popupImgBig);
     });
@@ -93,7 +94,8 @@ function insertFormToProfile() {
     profileName.textContent = inputName.value;
     profileJob.textContent = inputJob.value;
 }
-function saveProfile(event) {  
+function saveProfile(event) {
+        event.preventDefault();  
         insertFormToProfile();
         closePopup(popupEditProfile);
 }
@@ -124,9 +126,7 @@ function savePopupAddPlace(event) {
         inputUrl.value = '';
         inputTitle.value = '';
     }
-    const curentFormElement = event.target.parentElement; //Чтобы не повторять код, подготавливаю данные для вызова функции
-    const curentInputList = Array.from(curentFormElement.querySelectorAll('.form__input'));
-    toggleButtonState(curentInputList, event.target);
+    enableValidation(options);
 }
 document.querySelector('.form-add-place__submit').addEventListener('click', savePopupAddPlace);
 
@@ -151,8 +151,7 @@ const popupsList = Array.from(document.querySelectorAll('.popup'));
 popupsList.forEach((popupElement) => {
     popupElement.addEventListener('mousedown', (evt) => {
         if (evt.target.classList.contains('popup')){
-            const itemToClose = document.querySelector('.popup_opened');
-            closePopup(itemToClose);
+            closePopup(evt.target);
         }
     });
 });
