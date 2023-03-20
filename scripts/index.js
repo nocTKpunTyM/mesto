@@ -17,6 +17,13 @@ function closePopup(element) {
     element.classList.remove('popup_opened');
 }
 
+// Создание карточки для более удобного вызова
+const renderCard = (place) => {
+    const card = new Card(place, '#place', openPopup);
+    const cardElement = card.generateCard();
+    return cardElement;
+ }
+
 // РАБОТА МОДАЛКИ РЕДАКТИРОВАНИЯ ПРОФИЛЯ
 const popupEditProfile = document.querySelector('.popup-edit-profile');
 const buttonOpenEditProfile = document.querySelector('.lead__edit-button');
@@ -63,23 +70,21 @@ const inputTitle = document.querySelector('.form__input_type_title');
 const inputUrl = document.querySelector('.form__input_type_url');
 
 function savePopupAddPlace(event) {
-    if(!event.target.classList.contains('button_submit_inactive')) {
-        const place = 
-        {
-        name: inputTitle.value,
-        link: inputUrl.value
-        };
+console.log(event.target.classList);
+    const place = 
+    {
+    name: inputTitle.value,
+    link: inputUrl.value
+    };
 
-        const card = new Card(place, '#place', openPopup);
-        const cardElement = card.generateCard();
-        placesList.prepend(cardElement);
+    const cardElement = renderCard(place);
+    placesList.prepend(cardElement);
 
-        closePopup(popupAddPlace);
-        inputUrl.value = '';
-        inputTitle.value = '';
-    }
-
-    enableValidationStart(options);
+    closePopup(popupAddPlace);
+    inputUrl.value = '';
+    inputTitle.value = '';
+    const validation = new FormValidator(event.target, options);
+    validation.toggleButtonState();
 }
 
 document.querySelector('.form-add-place').addEventListener('submit', (event) => {
@@ -113,9 +118,8 @@ popupsList.forEach((popupElement) => {
 });
 
 // ЗАГРУЗКА КАРТОЧЕК ПРИ ОТКРЫТИИ СТРАНИЦЫ
-places.forEach( (element) => {
-    const card = new Card(element, '#place', openPopup);
-    const cardElement = card.generateCard();
+places.forEach( (place) => {
+    const cardElement = renderCard(place);
     placesList.append(cardElement);
 })
 

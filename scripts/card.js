@@ -24,28 +24,28 @@ export default class Card {
 
     generateCard() {
         this._element = this._getTemplate();
-        this._setEventListeners();
+        this._elementImage = this._element.querySelector(placeElements.imageSelector);
         this._element.querySelector(placeElements.titleSelector).textContent = this._title;
-        this._element.querySelector(placeElements.imageSelector).alt = this._title;
-        this._element.querySelector(placeElements.imageSelector).src = this._src;
-        
+        this._elementImage.alt = this._title;
+        this._elementImage.src = this._src;
+        this._setEventListeners();
         return this._element; 
     }
 
-    _hadleLike(evt) {
+    _handleLike(evt) {
         evt.target.classList.toggle(placeElements.btnLikeActiveSelector);
     }
 
-    _hadleTrash(elem) {
+    _handleTrash(elem) {
         elem.remove();
     }
 
     _setEventListeners() {
-        this._element.querySelector(placeElements.btnLikeSelector).addEventListener('click', this._hadleLike);
+        this._element.querySelector(placeElements.btnLikeSelector).addEventListener('click', this._handleLike);
         this._element.querySelector(placeElements.btnTrashSelector).addEventListener('click', () => {
-            this._hadleTrash (this._element);
+            this._handleTrash (this._element);
         });
-        this._element.querySelector(placeElements.imageSelector).addEventListener('click', () => {
+        this._elementImage.addEventListener('click', () => {
             imageBig.src = this._src;
             imageBig.alt = this._title;
             imageBigSub.textContent = this._title;
