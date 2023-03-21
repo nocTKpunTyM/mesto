@@ -5,6 +5,14 @@ import Card from './card.js';
 
 const placesList = document.querySelector('.places');
 
+const popupAddPlace = document.querySelector('.popup-add-place');
+const formAddPlace = popupAddPlace.querySelector('.form');
+const formEditProfile = document.querySelector('.form-profile');
+
+const validationProfile = new FormValidator(formEditProfile, options);
+validationProfile.enableValidation();
+const validationAddPlace = new FormValidator(formAddPlace, options);
+validationAddPlace.enableValidation();
 
 // ОТКРЫТИЕ И ЗАКРЫТИЕ ВСЕХ МОДАЛЬНЫХ ОКОН
 function openPopup(element) {
@@ -28,7 +36,7 @@ const renderCard = (place) => {
 const popupEditProfile = document.querySelector('.popup-edit-profile');
 const buttonOpenEditProfile = document.querySelector('.lead__edit-button');
 const buttonCloseEditProfile = document.querySelector('.popup-edit-profile__close');
-const formEditProfile = document.querySelector('.form-profile');
+
 const profileName = document.querySelector('.lead__title');
 const profileJob = document.querySelector('.lead__subtitle');
 const inputName = document.querySelector('.form__input_type_name');
@@ -58,7 +66,6 @@ function saveProfile(event) {
 formEditProfile.addEventListener('submit', saveProfile);
 
 // РАБОТА МОДАЛКИ ДОБАВЛЕНИЯ КАРТОЧКИ МЕСТА
-const popupAddPlace = document.querySelector('.popup-add-place');
 document.querySelector('.lead__add-button').addEventListener('click', ()  => {
     openPopup(popupAddPlace);
 });
@@ -70,7 +77,6 @@ const inputTitle = document.querySelector('.form__input_type_title');
 const inputUrl = document.querySelector('.form__input_type_url');
 
 function savePopupAddPlace(event) {
-console.log(event.target.classList);
     const place = 
     {
     name: inputTitle.value,
@@ -83,8 +89,7 @@ console.log(event.target.classList);
     closePopup(popupAddPlace);
     inputUrl.value = '';
     inputTitle.value = '';
-    const validation = new FormValidator(event.target, options);
-    validation.toggleButtonState();
+    validationAddPlace.toggleButtonState();
 }
 
 document.querySelector('.form-add-place').addEventListener('submit', (event) => {
@@ -122,13 +127,3 @@ places.forEach( (place) => {
     const cardElement = renderCard(place);
     placesList.append(cardElement);
 })
-
-const enableValidationStart = (options) => {
-    const formList = Array.from(document.querySelectorAll(options.formSelector));
-    formList.forEach((formElement) => {
-      const validation = new FormValidator(formElement, options);
-      validation.enableValidation();
-    });
-  };
-  
-enableValidationStart(options);
