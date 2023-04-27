@@ -66,13 +66,13 @@ export const inputName = document.querySelector('.form__input_type_name');
 export const inputJob = document.querySelector('.form__input_type_job');
 
 // Добавление карточки из модалки
+export const buttonOpenAddPlace = document.querySelector('.lead__add-button')
 export const inputTitle = document.querySelector('.form__input_type_title');
 export const inputUrl = document.querySelector('.form__input_type_url');
 
 // ЗАКРЫТИЕ МОДАЛКИ С БОЛЬШОЙ КАРТИНКОЙ
 export const imageBigSelector = '.popup-img-big';
 export const popupImgBig = document.querySelector('.popup-img-big');
-
 
 // Для класса Card
 export const imageBig = document.querySelector('.popup-img-big__image');

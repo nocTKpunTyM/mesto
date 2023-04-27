@@ -6,7 +6,6 @@ export default class Card {
         this._src = data.link;
         this._handleImageBig = handleImageBig;
         this.placeElements = placeElements;
-console.log(this.placeElements.btnLikeActiveSelector);
     }
 
     _getTemplate() {

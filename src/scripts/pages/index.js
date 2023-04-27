@@ -6,6 +6,7 @@ import {
     templateSelector,
     placeElements,
 
+    buttonOpenAddPlace,
     addPlaceSelector,
     formAddPlace,
     formEditProfile,
@@ -17,8 +18,6 @@ import {
     profileJob,
     inputName,
     inputJob,
-    inputTitle,
-    inputUrl,
 
     imageBigSelector,
 } from '../utils/constants.js';
@@ -30,66 +29,73 @@ import PopupWithImage from '../components/PopupWithImage.js';
 import PopupWithForm from '../components/PopupWithForm.js';
 import UserInfo from '../components/UserInfo.js';
 
+const userProfile = new UserInfo ({profileName, profileJob});
+
 const popupEditProfile = new PopupWithForm ({
-    handleSubmit: (event) => {
-            event.preventDefault();
-            userProfile.setUserInfo();
-            popupEditProfile.closePopup();
+    handleSubmit: (inputs) => {
+        const inputName = inputs.name;
+        const inputJob = inputs.job;
+        userProfile.setUserInfo(inputName, inputJob);
+        popupEditProfile.close();
         }
     },
     options,
     editProfileSelector
 );
+popupEditProfile.setEventListeners();
 
 const popupAddPlace = new PopupWithForm ({
-    handleSubmit: (event) => {
-        event.preventDefault();
-        savePopupAddPlace();
+    handleSubmit: (inputs) => {        
+        savePopupAddPlace(inputs);
         }
     },
     options,
     addPlaceSelector
 );
+popupAddPlace.setEventListeners();
 
 const validationProfile = new FormValidator(formEditProfile, options);
+validationProfile.enableValidation();
 const validationAddPlace = new FormValidator(formAddPlace, options);
-const userProfile = new UserInfo ({profileName, profileJob, inputName, inputJob});
+validationAddPlace.enableValidation();
+const popupImage = new PopupWithImage (imageBigSelector);
+
+function createCard (place) {
+    const card = new Card({
+        data: place,
+        placeElements,
+        handleImageBig: (imageData) => {
+            popupImage.open (imageData);
+        }
+    },
+    templateSelector
+    );   
+    return card;
+}
 
 // ОТКРЫТИЕ МОДАЛКИ РЕДАКТИРОВАНИЯ ПРОФИЛЯ
 function openPopupEditProfile() {
-    userProfile.getUserInfo();
-    validationProfile.enableValidation();  
-    popupEditProfile.openPopup();
+    inputName.value = userProfile.getUserInfo().profileName;
+    inputJob.value = userProfile.getUserInfo().profileJob;
+    popupEditProfile.open();
 }
 buttonOpenEditProfile.addEventListener('click', openPopupEditProfile);
 
 // РАБОТА МОДАЛКИ ДОБАВЛЕНИЯ КАРТОЧКИ МЕСТА
-document.querySelector('.lead__add-button').addEventListener('click', ()  => {
-    popupAddPlace.openPopup();
-    validationAddPlace.enableValidation();
+buttonOpenAddPlace.addEventListener('click', ()  => {
+    popupAddPlace.open();
 });
 // Добавление карточки из модалки
-function savePopupAddPlace() {
+function savePopupAddPlace(inputs) {
     const place = 
     {
-    name: inputTitle.value,
-    link: inputUrl.value
+    name: inputs.title,
+    link: inputs.url
     };
-
-    const newCard = new Card({
-        data: place,
-        placeElements,
-        handleImageBig: (imageData) => {
-            const popupimage = new PopupWithImage (imageBigSelector, imageData);
-            popupimage.openPopup ();
-        }
-    },
-    templateSelector
-    );
-    const cardNewElement = newCard.generateCard();
+    const cardNewElement = createCard (place).generateCard();
     cardsList.prependItem(cardNewElement);
 
-    popupAddPlace.closePopup();
+    popupAddPlace.close();
     validationAddPlace.toggleButtonState();
 }
 
@@ -97,17 +103,7 @@ function savePopupAddPlace() {
 const cardsList = new Section ({
     items: places,
     renderer: (cardItem) => {
-        const card = new Card({
-            data: cardItem,
-            placeElements,
-            handleImageBig: (imageData) => {
-                const popupimage = new PopupWithImage (imageBigSelector, imageData);
-                popupimage.openPopup ();
-            }
-        },
-        templateSelector
-        );
-        const cardElement = card.generateCard();
+        const cardElement = createCard (cardItem).generateCard();
         cardsList.addItem(cardElement);
     }
   },
