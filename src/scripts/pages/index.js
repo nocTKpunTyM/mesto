@@ -25,8 +25,7 @@ import {
     formEditAvatar,
     changeAvatarSelector,
     changeAvatarButton,
-    avatarBlock,
-    inputAvatar
+    avatarBlock
 } from '../utils/constants.js';
 
 import FormValidator from '../components/Formvalidator.js';
@@ -68,6 +67,7 @@ const popupChangeAvavtar = new PopupWithForm ({
             let thisButton = popupChangeAvavtar.thisButton();
             api.changeAvatar(inputAvatar, avatarBlock, thisButton);
             popupChangeAvavtar.close();
+            validationEditAvatar.toggleButtonState();
         }
     },
     options,
@@ -76,8 +76,6 @@ const popupChangeAvavtar = new PopupWithForm ({
 popupChangeAvavtar.setEventListeners();
 // Откроем модалку редактирования аватарки
 changeAvatarButton.addEventListener('click', ()  => {
-const avatarUrl = window.getComputedStyle(avatarBlock).backgroundImage.slice(4, -1).replace(/"/g, ""); 
-    inputAvatar.value = avatarUrl;
     popupChangeAvavtar.open();
 });
 

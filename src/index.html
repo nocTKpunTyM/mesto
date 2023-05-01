@@ -97,7 +97,8 @@
         <button type="button" class="button button_close popup-change-avatar__close"></button>
         <form name="change-avatar" class="form form-change-avatar" novalidate>
           <h2 class="form__title">Обновить аватар</h2>
-          <input type="text" name="avatar" class="form__input form__input_type_avatar">
+          <input id="avatar-input" name="avatar" type="url" placeholder="Ссылка на аватар" class="form__input form__input_type_avatar" required>
+          <span class="avatar-input-error form__input-error"></span>
           <button type="submit" class="button button_submit">Изменить</button>
         </form>
       </div>
