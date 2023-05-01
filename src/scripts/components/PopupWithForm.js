@@ -5,6 +5,7 @@ export default class PopupWithForm extends Popup {
         super(popupSelector);
         this._handleSubmit = handleSubmit;
         this._form = this._popup.querySelector(options.formSelector);
+        this._subButton = this._form.querySelector('.button');
         this._inputList = Array.from(this._form.querySelectorAll(options.inputSelector));    
     }
 
@@ -19,6 +20,10 @@ export default class PopupWithForm extends Popup {
     close () {      
         super.close();
         this._form.reset();          
+    }
+
+    thisButton () {     
+        return this._subButton;
     }
 
     setEventListeners () {

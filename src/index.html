@@ -15,7 +15,8 @@
     <main class="main">
 
       <section class="lead">
-        <img src="<%=require('./images/lead-jak-iv-custo.png')%>" alt="Жак-Ив Кусто" class="lead__picture">
+        <div class="lead__picture"></div>
+        <button class="lead__picture-button"></button>
         <div class="lead__profile">
           <div class="lead__profile-name">
             <h1 class="lead__title">Жак-Ив Кусто</h1>
@@ -79,14 +80,39 @@
         <p class="popup-img-big__image-subline"></p>
       </div>
     </div>
+
+    <div class="popup popup-remove-place">
+      <div class="popup__container popup__container_only-button">
+        <button type="button" class="button button_close popup-remove-place__close"></button>
+        <form name="remove-place" class="form form__only-button" novalidate>
+          <h2 class="form__title form__title-only-button">Вы уверены?</h2>
+          <input type="hidden" name="id" value="1" class="form__input form__input_type_cardId">
+          <button type="submit" class="button button_submit button_submit-only-button form-remove-place__submit">Да</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="popup popup-change-avatar">
+      <div class="popup__container popup__container_only-button">
+        <button type="button" class="button button_close popup-change-avatar__close"></button>
+        <form name="change-avatar" class="form" novalidate>
+          <h2 class="form__title">Обновить аватар</h2>
+          <input type="text" name="avatar" class="form__input form__input_type_avatar">
+          <button type="submit" class="button button_submit form-change-avatar__submit">Изменить</button>
+        </form>
+      </div>
+    </div>
     
     <template id="place">
-      <article class="place">
+      <article class="place" id="">
         <button type="button" class="button button__trash"></button>
           <img src="<%=require('./images/header-logo.svg')%>" alt="Проект Место" class="place__image">
         <div class="place__description">
           <h2 class="place__title"></h2>
-          <button type="button" class="button button__like"></button>
+          <div class="place__like-box">
+            <button type="button" class="button button__like"></button>
+            <p class="place__like-count">0</p>
+          </div>
         </div>
       </article>
     </template>

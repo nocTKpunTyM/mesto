@@ -1,6 +1,6 @@
 import '../../styles/pages/index.css';
 import {
-    places,
+    myId,
     options,
     placesListSelector,
     templateSelector,
@@ -20,6 +20,12 @@ import {
     inputJob,
 
     imageBigSelector,
+    removeCardSelector,
+
+    changeAvatarSelector,
+    changeAvatarButton,
+    avatarBlock,
+    inputAvatar
 } from '../utils/constants.js';
 
 import FormValidator from '../components/Formvalidator.js';
@@ -28,14 +34,25 @@ import Card from '../components/Card.js';
 import PopupWithImage from '../components/PopupWithImage.js';
 import PopupWithForm from '../components/PopupWithForm.js';
 import UserInfo from '../components/UserInfo.js';
+import Api from '../components/Api.js';
 
+const api = new Api({
+    baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-64',
+    headers: {
+      authorization: '92dc896a-714f-46b7-abd9-c8be237b7915',
+      'Content-Type': 'application/json'
+    }
+});
+
+// Получаем информацию о пользователе
 const userProfile = new UserInfo ({profileName, profileJob});
-
+// Создаем модалку редактирования пользователя
 const popupEditProfile = new PopupWithForm ({
     handleSubmit: (inputs) => {
         const inputName = inputs.name;
         const inputJob = inputs.job;
-        userProfile.setUserInfo(inputName, inputJob);
+        let thisButton = popupEditProfile.thisButton();
+        api.changeProfile(inputName, inputJob, userProfile, thisButton);
         popupEditProfile.close();
         }
     },
@@ -43,7 +60,98 @@ const popupEditProfile = new PopupWithForm ({
     editProfileSelector
 );
 popupEditProfile.setEventListeners();
+// Создаем модалку редактирования аватарки
+const popupChangeAvavtar = new PopupWithForm ({
+    handleSubmit: (inputs) => {  
+            const inputAvatar = inputs.avatar;
+            let thisButton = popupChangeAvavtar.thisButton();
+            api.changeAvatar(inputAvatar, avatarBlock, thisButton);
+            popupChangeAvavtar.close();
+        }
+    },
+    options,
+    changeAvatarSelector
+);
+popupChangeAvavtar.setEventListeners();
+// Откроем модалку редактирования аватарки
+changeAvatarButton.addEventListener('click', ()  => {
+const avatarUrl = window.getComputedStyle(avatarBlock).backgroundImage.slice(4, -1).replace(/"/g, ""); 
+    inputAvatar.value = avatarUrl;
+    popupChangeAvavtar.open();
+});
 
+// ОТКРЫТИЕ МОДАЛКИ РЕДАКТИРОВАНИЯ ПРОФИЛЯ
+function openPopupEditProfile() {
+    inputName.value = userProfile.getUserInfo().profileName;
+    inputJob.value = userProfile.getUserInfo().profileJob;
+    popupEditProfile.open();
+}
+buttonOpenEditProfile.addEventListener('click', openPopupEditProfile);
+// Из АПИ в инпуты профиля
+function putInProfile (result) {
+    profileName.textContent = result.name;
+    profileJob.textContent = result.about;
+    avatarBlock.style.backgroundImage = 'url("' + result.avatar + '")';
+}
+api.getProfile(putInProfile);
+
+/////// ПОЯВЛЕНИЕ КАРТОЧЕК ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
+const popupImage = new PopupWithImage (imageBigSelector);
+// Создание пустой секции для карточек мест
+const cardsList = new Section ({
+    items: [],
+    renderer: (cardItem) => {    
+        const cardElement = createCard (cardItem).generateCard();
+        cardsList.addItem(cardElement);
+    }
+  },
+  placesListSelector
+);
+// Cоздание отдельной карточки
+function createCard (place) {    
+    const card = new Card({
+        data: place,
+        placeElements,
+        handleImageBig: (imageData) => {
+            popupImage.open (imageData);
+        },
+        handleRemoveCard: (place) => {
+            document.querySelector('.form__input_type_cardId').value = place.id;
+            popupRemovePlace.open();
+        },
+        handleLike: (card) => {
+            if (card.myLike) {
+                api.toDisLike (card, placeElements);
+            }
+            else {
+                api.toLike (card, placeElements);
+            }    
+        }
+    },
+    templateSelector,
+    myId
+    );   
+    return card;
+}
+// Запрос на получение карточек
+const cardsPromise = new Promise (function (resolve, reject) {
+    let cards = api.getPlaces();
+    if (cards) {
+        resolve(cards);
+    } else {
+        reject('Не пришли карты')
+    }
+});
+// отрисовка карточек при загрузке страницы
+cardsPromise
+.then(function (value) {
+    cardsList.renderItems(value);
+})
+.catch(function (value) {
+    console.log(value);
+});
+
+// РАБОТА МОДАЛКИ ДОБАВЛЕНИЯ КАРТОЧКИ МЕСТА
 const popupAddPlace = new PopupWithForm ({
     handleSubmit: (inputs) => {        
         savePopupAddPlace(inputs);
@@ -53,61 +161,66 @@ const popupAddPlace = new PopupWithForm ({
     addPlaceSelector
 );
 popupAddPlace.setEventListeners();
-
-const validationProfile = new FormValidator(formEditProfile, options);
-validationProfile.enableValidation();
-const validationAddPlace = new FormValidator(formAddPlace, options);
-validationAddPlace.enableValidation();
-const popupImage = new PopupWithImage (imageBigSelector);
-
-function createCard (place) {
-    const card = new Card({
-        data: place,
-        placeElements,
-        handleImageBig: (imageData) => {
-            popupImage.open (imageData);
-        }
-    },
-    templateSelector
-    );   
-    return card;
-}
-
-// ОТКРЫТИЕ МОДАЛКИ РЕДАКТИРОВАНИЯ ПРОФИЛЯ
-function openPopupEditProfile() {
-    inputName.value = userProfile.getUserInfo().profileName;
-    inputJob.value = userProfile.getUserInfo().profileJob;
-    popupEditProfile.open();
-}
-buttonOpenEditProfile.addEventListener('click', openPopupEditProfile);
-
-// РАБОТА МОДАЛКИ ДОБАВЛЕНИЯ КАРТОЧКИ МЕСТА
+// Открытие модалки добавления места
 buttonOpenAddPlace.addEventListener('click', ()  => {
     popupAddPlace.open();
 });
 // Добавление карточки из модалки
-function savePopupAddPlace(inputs) {
+function savePopupAddPlace(inputs) {   
     const place = 
     {
     name: inputs.title,
     link: inputs.url
     };
-    const cardNewElement = createCard (place).generateCard();
-    cardsList.prependItem(cardNewElement);
-
+    let thisButton = popupAddPlace.thisButton();
+    const cardPromise = new Promise (function (resolve, reject) {
+        let card = api.putPlace(place, thisButton);
+        if (card) {
+            resolve(card);
+        } else {
+            reject('Не сохранилась карточка')
+        }
+    });
+    cardPromise
+    .then(function (cardItem) {
+        const cardElement = createCard (cardItem).generateCard();
+        cardsList.prependItem(cardElement);
+    })
+    .catch(function (value) {
+        console.log(value);
+    });
     popupAddPlace.close();
     validationAddPlace.toggleButtonState();
 }
-
-// ПОЯВЛЕНИЕ КАРТОЧЕК МЕСТА ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
-const cardsList = new Section ({
-    items: places,
-    renderer: (cardItem) => {
-        const cardElement = createCard (cardItem).generateCard();
-        cardsList.addItem(cardElement);
-    }
-  },
-  placesListSelector
+// Удаление карточек
+const popupRemovePlace = new PopupWithForm ({
+    handleSubmit: (inputs) => {        
+        let cardId = inputs.id;
+        let thisButton = popupRemovePlace.thisButton();
+        const deleteCard = new Promise (function (resolve, reject) {
+            let card = api.delPlace(cardId, thisButton);
+            if (card) {
+                resolve(card);
+            } else {
+                reject('Не удалилась карточка')
+            }
+        });
+        deleteCard
+        .then(function (result) {
+            console.log(result);
+            const cardForDel = document.getElementById(cardId);
+            cardForDel.remove();
+        });
+            popupRemovePlace.close();
+        }
+    },
+    options,
+    removeCardSelector
 );
+popupRemovePlace.setEventListeners();
 
-cardsList.renderItems();
+// Включаем валидацию всем формам
+const validationProfile = new FormValidator(formEditProfile, options);
+validationProfile.enableValidation();
+const validationAddPlace = new FormValidator(formAddPlace, options);
+validationAddPlace.enableValidation();

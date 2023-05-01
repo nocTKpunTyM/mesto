@@ -1,42 +1,12 @@
+export const myId = '2e2becd926e5f6fe27258866';
+
 export const placesListSelector = '.places';
 export const placesList = document.querySelector(placesListSelector);
 export const addPlaceSelector = '.popup-add-place';
 export const popupAddPlace = document.querySelector(addPlaceSelector);
 export const formAddPlace = popupAddPlace.querySelector('.form');
 export const formEditProfile = document.querySelector('.form-profile');
-
-const barhansImage = new URL('../../images/place-barhans.jpg', import.meta.url);
-const darkMountImage = new URL('../../images/place-dark-mountain.jpg', import.meta.url);
-const placeParadiseImage = new URL('../../images/place-paradise.jpg', import.meta.url);
-const tanisMountainImage = new URL('../../images/place-tanis-mountain.jpg', import.meta.url);
-const wingingRoadImage = new URL('../../images/place-winging-road.jpg', import.meta.url);
-const winterMountainImage = new URL('../../images/place-winter-mountain.jpg', import.meta.url);
-export const places = [
-    {
-        name: 'Барханы',
-        link: barhansImage
-    },
-    {
-        name: 'Темная гора',
-        link: darkMountImage
-    },
-    {
-        name: 'Райский уголок',
-        link: placeParadiseImage
-    },
-    {
-        name: 'Гора Танисс',
-        link: tanisMountainImage
-    },
-    {
-        name: 'Извилистая дорога удачи',
-        link: wingingRoadImage
-    },
-    {
-        name: 'Зимняя гора причуд',
-        link: winterMountainImage
-    }
-];
+export const changeAvatarButton = document.querySelector('.lead__picture-button');
 
 export const options = {
     formSelector: '.form',
@@ -53,6 +23,7 @@ export const placeElements = {
     btnLikeActiveSelector: 'button__like_active',
     btnLikeSelector: '.button__like',
     btnTrashSelector: '.button__trash',
+    likeCount: '.place__like-count'
 };
 
 // РАБОТА МОДАЛКИ РЕДАКТИРОВАНИЯ ПРОФИЛЯ
@@ -78,3 +49,11 @@ export const popupImgBig = document.querySelector('.popup-img-big');
 export const imageBig = document.querySelector('.popup-img-big__image');
 export const imageBigSub = document.querySelector('.popup-img-big__image-subline');
 export const templateSelector = '#place';
+
+// Для работы с аватаркой
+export const changeAvatarSelector = '.popup-change-avatar';
+export const avatarBlock = document.querySelector('.lead__picture');
+export const inputAvatar = document.querySelector('.form__input_type_avatar');
+
+// Удаление каротчек
+export const removeCardSelector = '.popup-remove-place';
