@@ -757,7 +757,7 @@ template {
         min-width: 358px;
     }
 }
-.form__only-button {
+.form_only-button {
     margin: 0 0 0 0;
 }
 .form__input {
