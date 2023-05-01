@@ -28,7 +28,7 @@
 @import url(../blocks/button/__trash/button__trash.css);
 
 @import url(../blocks/form/form.css);
-@import url(../blocks/form/__only-button/form__only-button.css);
+@import url(../blocks/form/_only-button/form_only-button.css);
 @import url(../blocks/form/__input/form__input.css);
 @import url(../blocks/form/__input-div/form__input-div.css);
 @import url(../blocks/form/__input-error/form__input-error.css);

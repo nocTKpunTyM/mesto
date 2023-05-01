@@ -22,6 +22,7 @@ import {
     imageBigSelector,
     removeCardSelector,
 
+    formEditAvatar,
     changeAvatarSelector,
     changeAvatarButton,
     avatarBlock,
@@ -219,8 +220,10 @@ const popupRemovePlace = new PopupWithForm ({
 );
 popupRemovePlace.setEventListeners();
 
-// Включаем валидацию всем формам
+// Назначаем валидацию всем формам
 const validationProfile = new FormValidator(formEditProfile, options);
 validationProfile.enableValidation();
 const validationAddPlace = new FormValidator(formAddPlace, options);
 validationAddPlace.enableValidation();
+const validationEditAvatar = new FormValidator(formEditAvatar, options);
+validationEditAvatar.enableValidation();

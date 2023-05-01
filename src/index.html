@@ -50,7 +50,7 @@
             <input id="job-input" name="job" type="text" placeholder="Профессия" class="form__input form__input_type_job" minlength="2" maxlength="200" required>
             <span class="job-input-error form__input-error"></span>
           </div>
-          <button type="submit" class="button button_submit form-profile__submit">Сохранить</button>
+          <button type="submit" class="button button_submit">Сохранить</button>
         </form>
       </div>
     </div>
@@ -68,7 +68,7 @@
             <input id="url-input" name="url" type="url" placeholder="Ссылка на картинку" class="form__input form__input_type_url" required>
             <span class="url-input-error form__input-error"></span>
           </div>
-          <button type="submit" class="button button_submit form-add-place__submit">Добавить</button>
+          <button type="submit" class="button button_submit">Добавить</button>
         </form>
       </div>
     </div>
@@ -84,10 +84,10 @@
     <div class="popup popup-remove-place">
       <div class="popup__container popup__container_only-button">
         <button type="button" class="button button_close popup-remove-place__close"></button>
-        <form name="remove-place" class="form form__only-button" novalidate>
+        <form name="remove-place" class="form form_only-button" novalidate>
           <h2 class="form__title form__title-only-button">Вы уверены?</h2>
           <input type="hidden" name="id" value="1" class="form__input form__input_type_cardId">
-          <button type="submit" class="button button_submit button_submit-only-button form-remove-place__submit">Да</button>
+          <button type="submit" class="button button_submit button_submit-only-button">Да</button>
         </form>
       </div>
     </div>
@@ -95,10 +95,10 @@
     <div class="popup popup-change-avatar">
       <div class="popup__container popup__container_only-button">
         <button type="button" class="button button_close popup-change-avatar__close"></button>
-        <form name="change-avatar" class="form" novalidate>
+        <form name="change-avatar" class="form form-change-avatar" novalidate>
           <h2 class="form__title">Обновить аватар</h2>
           <input type="text" name="avatar" class="form__input form__input_type_avatar">
-          <button type="submit" class="button button_submit form-change-avatar__submit">Изменить</button>
+          <button type="submit" class="button button_submit">Изменить</button>
         </form>
       </div>
     </div>

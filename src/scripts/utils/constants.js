@@ -6,6 +6,7 @@ export const addPlaceSelector = '.popup-add-place';
 export const popupAddPlace = document.querySelector(addPlaceSelector);
 export const formAddPlace = popupAddPlace.querySelector('.form');
 export const formEditProfile = document.querySelector('.form-profile');
+export const formEditAvatar = document.querySelector('.form-change-avatar');
 export const changeAvatarButton = document.querySelector('.lead__picture-button');
 
 export const options = {
