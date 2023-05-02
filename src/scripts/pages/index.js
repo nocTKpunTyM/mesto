@@ -1,6 +1,5 @@
 import '../../styles/pages/index.css';
 import {
-    myId,
     options,
     placesListSelector,
     templateSelector,
@@ -21,12 +20,15 @@ import {
 
     imageBigSelector,
     removeCardSelector,
+    inputCardId,
 
     formEditAvatar,
     changeAvatarSelector,
     changeAvatarButton,
     avatarBlock
 } from '../utils/constants.js';
+
+import {renderLoading, urlForCSS} from '../utils/utils.js';
 
 import FormValidator from '../components/Formvalidator.js';
 import Section from '../components/Section.js';
@@ -43,17 +45,44 @@ const api = new Api({
       'Content-Type': 'application/json'
     }
 });
-
-// Получаем информацию о пользователе
+let myId = '';
+//Ждем данные профиля и карточек, затем заполняем профиль и карточки на странице
+Promise.all([api.getProfile(), api.getPlaces()])
+  .then(([profile, places]) => {
+    myId = profile._id;
+    putInProfile(profile);
+    cardsList.renderItems(places);
+  })
+  .catch(err => console.log(err));
+// Подготавливаем карту пользователя
 const userProfile = new UserInfo ({profileName, profileJob});
+// Из АПИ в инпуты профиля
+function putInProfile (profile) {
+    profileName.textContent = profile.name;
+    profileJob.textContent = profile.about;
+    avatarBlock.style.backgroundImage = urlForCSS(profile.avatar);
+}
+
 // Создаем модалку редактирования пользователя
 const popupEditProfile = new PopupWithForm ({
     handleSubmit: (inputs) => {
         const inputName = inputs.name;
         const inputJob = inputs.job;
-        let thisButton = popupEditProfile.thisButton();
-        api.changeProfile(inputName, inputJob, userProfile, thisButton);
-        popupEditProfile.close();
+        const thisButton = popupEditProfile.getSubmitButton();
+        const standartText = thisButton.textContent;
+        renderLoading (standartText, thisButton, true);
+        api.changeProfile(inputName, inputJob)
+        .then((result) => {
+            userProfile.setUserInfo(result.name, result.about);
+            popupEditProfile.close();
+            return result;
+        })
+        .catch((err) => {
+            console.log(err); 
+        })
+        .finally(() => {
+            renderLoading (standartText, thisButton);
+        });
         }
     },
     options,
@@ -61,22 +90,33 @@ const popupEditProfile = new PopupWithForm ({
 );
 popupEditProfile.setEventListeners();
 // Создаем модалку редактирования аватарки
-const popupChangeAvavtar = new PopupWithForm ({
+const popupChangeAvatar = new PopupWithForm ({
     handleSubmit: (inputs) => {  
             const inputAvatar = inputs.avatar;
-            let thisButton = popupChangeAvavtar.thisButton();
-            api.changeAvatar(inputAvatar, avatarBlock, thisButton);
-            popupChangeAvavtar.close();
-            validationEditAvatar.toggleButtonState();
+            const thisButton = popupChangeAvatar.getSubmitButton();
+            const standartText = thisButton.textContent;
+            renderLoading (standartText, thisButton, true);
+            api.changeAvatar(inputAvatar)
+            .then((result) => {
+                avatarBlock.style.backgroundImage = urlForCSS(result.avatar);
+                popupChangeAvatar.close();
+                validationEditAvatar.toggleButtonState();
+            })
+            .catch((err) => {
+                console.log(err); 
+            })
+            .finally(() => {
+                renderLoading (standartText, thisButton);
+            });       
         }
     },
     options,
     changeAvatarSelector
 );
-popupChangeAvavtar.setEventListeners();
+popupChangeAvatar.setEventListeners();
 // Откроем модалку редактирования аватарки
 changeAvatarButton.addEventListener('click', ()  => {
-    popupChangeAvavtar.open();
+    popupChangeAvatar.open();
 });
 
 // ОТКРЫТИЕ МОДАЛКИ РЕДАКТИРОВАНИЯ ПРОФИЛЯ
@@ -86,13 +126,6 @@ function openPopupEditProfile() {
     popupEditProfile.open();
 }
 buttonOpenEditProfile.addEventListener('click', openPopupEditProfile);
-// Из АПИ в инпуты профиля
-function putInProfile (result) {
-    profileName.textContent = result.name;
-    profileJob.textContent = result.about;
-    avatarBlock.style.backgroundImage = 'url("' + result.avatar + '")';
-}
-api.getProfile(putInProfile);
 
 /////// ПОЯВЛЕНИЕ КАРТОЧЕК ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
 const popupImage = new PopupWithImage (imageBigSelector);
@@ -115,15 +148,37 @@ function createCard (place) {
             popupImage.open (imageData);
         },
         handleRemoveCard: (place) => {
-            document.querySelector('.form__input_type_cardId').value = place.id;
+            inputCardId.value = place.id;
             popupRemovePlace.open();
         },
         handleLike: (card) => {
             if (card.myLike) {
-                api.toDisLike (card, placeElements);
+                api.toDisLike (card)
+                .then(function (result) {
+                    card.likeCount.textContent = result.likes.length;
+                    card
+                    .querySelector(placeElements.btnLikeSelector)
+                    .classList
+                    .remove(placeElements.btnLikeActiveSelector);
+                    card.myLike = false;
+                })
+                .catch(function (value) {
+                    console.log(value);
+                });
             }
             else {
-                api.toLike (card, placeElements);
+                api.toLike (card)
+                .then(function (result) {
+                    card.likeCount.textContent = result.likes.length;
+                    card
+                    .querySelector(placeElements.btnLikeSelector)
+                    .classList
+                    .add(placeElements.btnLikeActiveSelector);
+                    card.myLike = true;
+                })
+                .catch(function (value) {
+                    console.log(value);
+                });
             }    
         }
     },
@@ -132,23 +187,6 @@ function createCard (place) {
     );   
     return card;
 }
-// Запрос на получение карточек
-const cardsPromise = new Promise (function (resolve, reject) {
-    let cards = api.getPlaces();
-    if (cards) {
-        resolve(cards);
-    } else {
-        reject('Не пришли карты')
-    }
-});
-// отрисовка карточек при загрузке страницы
-cardsPromise
-.then(function (value) {
-    cardsList.renderItems(value);
-})
-.catch(function (value) {
-    console.log(value);
-});
 
 // РАБОТА МОДАЛКИ ДОБАВЛЕНИЯ КАРТОЧКИ МЕСТА
 const popupAddPlace = new PopupWithForm ({
@@ -171,46 +209,43 @@ function savePopupAddPlace(inputs) {
     name: inputs.title,
     link: inputs.url
     };
-    let thisButton = popupAddPlace.thisButton();
-    const cardPromise = new Promise (function (resolve, reject) {
-        let card = api.putPlace(place, thisButton);
-        if (card) {
-            resolve(card);
-        } else {
-            reject('Не сохранилась карточка')
-        }
-    });
-    cardPromise
+    const thisButton = popupAddPlace.getSubmitButton();
+    const standartText = thisButton.textContent;
+    renderLoading (standartText, thisButton, true);
+    api.putPlace(place)
     .then(function (cardItem) {
         const cardElement = createCard (cardItem).generateCard();
         cardsList.prependItem(cardElement);
+        popupAddPlace.close();
+        validationAddPlace.toggleButtonState();
     })
     .catch(function (value) {
         console.log(value);
-    });
-    popupAddPlace.close();
-    validationAddPlace.toggleButtonState();
+    })
+    .finally(() => {
+        renderLoading (standartText, thisButton);
+    }); 
 }
 // Удаление карточек
 const popupRemovePlace = new PopupWithForm ({
     handleSubmit: (inputs) => {        
-        let cardId = inputs.id;
-        let thisButton = popupRemovePlace.thisButton();
-        const deleteCard = new Promise (function (resolve, reject) {
-            let card = api.delPlace(cardId, thisButton);
-            if (card) {
-                resolve(card);
-            } else {
-                reject('Не удалилась карточка')
-            }
-        });
-        deleteCard
+        const cardId = inputs.id;
+        const thisButton = popupRemovePlace.getSubmitButton();
+        const standartText = thisButton.textContent;
+        renderLoading (standartText, thisButton, true);
+        api.delPlace(cardId)
         .then(function (result) {
             console.log(result);
             const cardForDel = document.getElementById(cardId);
             cardForDel.remove();
-        });
             popupRemovePlace.close();
+        })
+        .catch((value) => {
+            console.log(value);
+        })
+        .finally(() => {
+            renderLoading (standartText, thisButton);
+        }); 
         }
     },
     options,

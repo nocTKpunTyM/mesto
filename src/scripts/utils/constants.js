@@ -1,5 +1,3 @@
-export const myId = '2e2becd926e5f6fe27258866';
-
 export const placesListSelector = '.places';
 export const placesList = document.querySelector(placesListSelector);
 export const addPlaceSelector = '.popup-add-place';
@@ -58,3 +56,4 @@ export const inputAvatar = document.querySelector('.form__input_type_avatar');
 
 // Удаление каротчек
 export const removeCardSelector = '.popup-remove-place';
+export const inputCardId =document.querySelector('.form__input_type_cardId')

@@ -22,7 +22,7 @@ export default class PopupWithForm extends Popup {
         this._form.reset();          
     }
 
-    thisButton () {     
+    getSubmitButton () {     
         return this._subButton;
     }
 

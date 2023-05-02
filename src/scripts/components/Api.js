@@ -4,31 +4,28 @@ export default class Api {
         this.headers = headers;
     }
 
+    _getStatus (res) {
+        if (res.ok) {
+            return res.json();
+          }
+        return Promise.reject(`Что-то пошло не так: ${res.status}`);
+    }
+
 /////////////////////// ЗАПРОС ДАННЫХ ПРОФИЛЯ //////////////////
-    getProfile (putInProfile) {
+    getProfile () {
         this.urlGet = this.baseUrl + '/users/me';
-        fetch(this.urlGet, {
+        return fetch(this.urlGet, {
             headers: this.headers
         })
         .then((res) => {
-            if (res.ok) {
-              return res.json();
-            }
-            return Promise.reject(`Что-то пошло не так: ${res.status}`);
-        })
-        .then((result) => {
-            putInProfile(result);
-        })
-        .catch((err) => {
-            console.log(err); // "Что-то пошло не так: ..."
-        });
+            return this._getStatus (res);
+        }) 
     }
 
 //----------------------- Изменение профиля ---------------//
-    changeProfile (inputName, inputJob, userProfile, thisButton) {
+    changeProfile (inputName, inputJob) {
         this.urlGet = this.baseUrl + '/users/me';
-        thisButton.textContent = 'Сохранение...';
-        fetch(this.urlGet, {
+        return fetch(this.urlGet, {
             method: 'PATCH',
             headers: this.headers,
             body: JSON.stringify({
@@ -37,28 +34,14 @@ export default class Api {
             })
         })
         .then((res) => {
-            if (res.ok) {
-              return res.json();
-            }
-            return Promise.reject(`Что-то пошло не так: ${res.status}`);
+            return this._getStatus (res);
         })
-        .then((result) => {
-            userProfile.setUserInfo(result.name, result.about);
-            return result;
-        })
-        .catch((err) => {
-            console.log(err); 
-        })
-        .finally(() => {
-            thisButton.textContent = 'Сохранить';
-        });
     }
 
 //----------------------- Изменение аватарки ---------------//
-    changeAvatar (inputAvatar, avatarBlock, thisButton) {        
+    changeAvatar (inputAvatar) {        
         this.urlGet = this.baseUrl + '/users/me/avatar';
-        thisButton.textContent = 'Сохранение...';
-        fetch(this.urlGet, {
+        return fetch(this.urlGet, {
             method: 'PATCH',
             headers: this.headers,
             body: JSON.stringify({
@@ -66,21 +49,8 @@ export default class Api {
             })
         })
         .then((res) => {
-            if (res.ok) {
-              return res.json();
-            }
-            return Promise.reject(`Что-то пошло не так: ${res.status}`);
-        })
-        .then((result) => {
-            avatarBlock.style.backgroundImage = 'url("' + result.avatar + '")';
-            return result;
-        })
-        .catch((err) => {
-            console.log(err); 
-        })
-        .finally(() => {
-            thisButton.textContent = 'Изменить';
-        });
+            return this._getStatus (res);
+        })   
     }
 
 /////////////////////// ЗАПРОС КАРТОЧЕК //////////////////
@@ -90,14 +60,13 @@ export default class Api {
             headers: this.headers
         })
         .then((res) => {
-              return res.json();
+            return this._getStatus (res);
         }); 
     } 
 
 //----------------------- Добавление нового места -----------//
-    putPlace (place, thisButton) {
+    putPlace (place) {
         this.urlGet = this.baseUrl + '/cards';
-        thisButton.textContent = 'Сохранение...';
         return fetch(this.urlGet, {
             method: 'POST',
             headers: this.headers,
@@ -107,95 +76,50 @@ export default class Api {
             })
         })
         .then((res) => {
-            return res.json();
+            return this._getStatus (res);
         });
     } 
 
 //----------------------- Удаление карточки места -----------//
-    delPlace (cardId, thisButton) {
+    delPlace (cardId) {
         this.urlGet = this.baseUrl + '/cards/' + cardId;
-        thisButton.textContent = 'Удаление...';
         return fetch(this.urlGet, {
             method: 'DELETE',
             headers: this.headers
         })
         .then((res) => {
-            if (res.ok) {
-                return res.json();
-              }
-              return Promise.reject(`Что-то пошло не так: ${res.status}`);
-        })
-        .finally(() => {
-            thisButton.textContent = 'Да';
+            return this._getStatus (res);
         });
     } 
 
 ////////////////// ИЗМЕНИТЬ КОЛИЧЕСТВО ЛАЙКОВ ///////////////////
 //------------------------Поставить лайк-----------------------//
-    toLike (card, placeElements) {       
+    toLike (card) {       
         this.urlGet = this.baseUrl + '/cards/' + card.id + '/likes';
-        fetch(this.urlGet, {
+        return fetch(this.urlGet, {
             method: 'PUT',
             headers: this.headers
         })
         .then((res) => {
-            if (res.ok) {
-            return res.json();
-            }
-            return Promise.reject(`Что-то пошло не так: ${res.status}`);
+            return this._getStatus (res);
         })
         .then((result) => {
-            card.likeCount.textContent = result.likes.length;
             return result;
-        })
-        .then((result) => {
-        card
-        .querySelector(placeElements.btnLikeSelector)
-        .classList
-        .add('button__like_active');
-        
-        card.myLike = true;
-            return result;
-        })
-        .catch((err) => {
-            console.log(err); 
-        })
-        .finally(() => {
-            console.log('like');
         });
     }
 
 //------------------------Убрать лайк-----------------------//
-    toDisLike (card, placeElements) {       
+    toDisLike (card) {       
         this.urlGet = this.baseUrl + '/cards/' + card.id + '/likes';
-        fetch(this.urlGet, {
+        return fetch(this.urlGet, {
             method: 'DELETE',
             headers: this.headers
         })
         .then((res) => {
-            if (res.ok) {
-            return res.json();
-            }
-            return Promise.reject(`Что-то пошло не так: ${res.status}`);
+            return this._getStatus (res);
         })
         .then((result) => {
-            card.likeCount.textContent = result.likes.length;
             return result;
-        })
-        .then((result) => {
-        card
-        .querySelector(placeElements.btnLikeSelector)
-        .classList
-        .remove('button__like_active');
-
-        card.myLike = false;
-            return result;
-        })
-        .catch((err) => {
-            console.log(err); 
-        })
-        .finally(() => {
-            console.log('Dislike');
         });
     }
 } 
