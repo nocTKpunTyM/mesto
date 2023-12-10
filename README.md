@@ -1,5 +1,5 @@
 # Проект: Место
-https://noctkpuntym.github.io/mesto/
+
 ### Обзор
 
 ### 4ПР:
